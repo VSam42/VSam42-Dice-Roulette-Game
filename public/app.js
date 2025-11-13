@@ -98,7 +98,7 @@ function App() {
             case 'player_waiting':
                 return <PlayerWaitingRoom socket={socket} gameState={gameState} playerName={playerName} />;
             default:
-                return <Home setView={setView} />;
+                return <Home setView={setView} setIsGm={setIsGm} />;
         }
     };
 
@@ -111,7 +111,7 @@ function App() {
 
 // --- View Components ---
 
-function Home({ setView }) {
+function Home({ setView, setIsGm }) {
     return (
         <div className="max-w-md mx-auto bg-white rounded-2xl shadow-2xl p-12 text-center">
             <h1 className="text-4xl font-bold text-gray-800 mb-6">Welcome to Dice Roulette</h1>
@@ -120,7 +120,7 @@ function Home({ setView }) {
                 <button onClick={() => setView('player_join')} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-6 rounded-lg text-lg transition-colors">
                     Join as Player
                 </button>
-                <button onClick={() => setView('gm_login')} className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-6 rounded-lg text-lg transition-colors">
+                <button onClick={() => { setIsGm(true); setView('gm_dashboard'); }} className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-6 rounded-lg text-lg transition-colors">
                     Login as Game Master
                 </button>
             </div>
@@ -128,22 +128,7 @@ function Home({ setView }) {
     );
 }
 
-function GMLogin({ setView, setIsGm }) {
-    const handleLogin = () => {
-        setIsGm(true);
-        setView('gm_dashboard');
-    };
-    return (
-        <div className="max-w-md mx-auto bg-white rounded-2xl shadow-2xl p-12 text-center">
-            <h1 className="text-3xl font-bold text-gray-800 mb-6">Game Master Login</h1>
-            <p className="text-gray-600 mb-8">Enter the password to continue.</p>
-            <input type="password" placeholder="Password" className="w-full px-4 py-2 mb-4 border-2 border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none" />
-            <button onClick={handleLogin} className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-6 rounded-lg text-lg transition-colors">
-                Login
-            </button>
-        </div>
-    );
-}
+
 
 function PlayerJoin({ socket, setView, setGameId, setPlayerName }) {
     const [name, setName] = useState('');

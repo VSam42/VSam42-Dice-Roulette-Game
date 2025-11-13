@@ -14,7 +14,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // In-memory storage for games
 const games = {};
-const GM_PASSWORD = 'gm'; // Simple hardcoded password for now
+
 
 function generateGameId() {
     return Math.random().toString(36).substring(2, 6).toUpperCase();
