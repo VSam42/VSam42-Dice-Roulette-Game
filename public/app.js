@@ -556,7 +556,7 @@ function Game({ socket, gameState, isGm }) {
             </div>
             <div className="bg-white rounded-xl shadow-xl p-8">
                 <div className="mb-6 text-center">
-                    <h2 className="text-3xl font-bold text-gray-800 mb-2">{currentPlayer.name}'s Turn</h2>
+                    {gameState.settings.rollMode !== 'shared' && <h2 className="text-3xl font-bold text-gray-800 mb-2">{currentPlayer.name}'s Turn</h2>}
                 </div>
                 {renderTurnContent()}
             </div>
