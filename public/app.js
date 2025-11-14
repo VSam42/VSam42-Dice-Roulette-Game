@@ -376,16 +376,7 @@ function Game({ socket, gameState, isGm }) {
                     return (
                         <div className="text-center">
                             <h3 className="text-xl font-semibold mb-4">Shared Roll Mode: Place Your Bets!</h3>
-                            <div className="mb-4">
-                                <h4 className="font-bold mb-2">Players' Bet Status:</h4>
-                                <ul className="list-disc list-inside mx-auto w-fit">
-                                    {gameState.players.map(p => (
-                                        <li key={p.playerId} className={p.bet ? 'text-green-600' : 'text-red-600'}>
-                                            {p.name}: {p.bet ? `Bet Placed (${p.bet.type}${p.bet.number ? ' ' + p.bet.number : ''})` : 'Waiting to Bet'}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
+                            
 
                             {!hasBet && !isGm && (
                                 <div>
@@ -530,13 +521,30 @@ function Game({ socket, gameState, isGm }) {
             <div className="bg-white rounded-xl shadow-xl p-6 mb-6">
                 <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2"><Users /> Scoreboard</h2>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {gameState.players.map((player, i) => (
-                        <div key={i} className={`p-4 rounded-lg border-4 ${i === gameState.currentPlayerIndex ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200 bg-gray-50'}`}>
-                            <div className="font-bold text-lg mb-1">{player.name}</div>
-                            <div className="text-3xl font-bold text-indigo-600 mb-2">{player.score}</div>
-                            <div className="flex items-center gap-2 text-sm text-gray-600"><RotateCcw /><span>{player.rerolls} rerolls</span></div>
-                        </div>
-                    ))}
+                    {gameState.players.map((player, i) => {
+                        const isHighlighted = gameState.settings.rollMode === 'shared'
+                            ? player.bet !== null
+                            : i === gameState.currentPlayerIndex;
+
+                        return (
+                            <div key={i} className={`p-4 rounded-lg border-4 ${isHighlighted ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200 bg-gray-50'}`}>
+                                <div className="font-bold text-lg mb-1">{player.name}</div>
+                                <div className="text-3xl font-bold text-indigo-600 mb-2">{player.score}</div>
+                                <div className="flex items-center justify-between text-sm text-gray-600">
+                                    {player.bet
+                                        ? <span className="text-green-600 font-semibold">Bet: {player.bet.type}{player.bet.number ? ` ${player.bet.number}` : ''}</span>
+                                        : <span className="text-gray-500">Waiting...</span>
+                                    }
+                                    {gameState.settings.rollMode !== 'shared' &&
+                                        <div className="flex items-center gap-1">
+                                            <RotateCcw />
+                                            <span>{player.rerolls}</span>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
             <div className="bg-white rounded-xl shadow-xl p-8">

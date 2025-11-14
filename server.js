@@ -58,6 +58,9 @@ const advanceTurn = (game) => {
         return;
     }
 
+    // Reset current player's bet before advancing
+    currentPlayer.bet = null;
+
     // Advance to next player
     game.currentPlayerIndex = (game.currentPlayerIndex + 1) % game.players.length;
     game.turnPhase = 'betting';
